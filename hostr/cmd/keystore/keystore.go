@@ -13,7 +13,7 @@ import (
 
 const PATH = ".nostr_account_secret"
 
-func SetSecret(key string) error {
+func SetSecret(key string) (string, error) {
 	// nsecから始まる場合はデコードする
 	if key[0:4] == "nsec" {
 		_, v, err := nip19.Decode(key)
@@ -25,16 +25,17 @@ func SetSecret(key string) error {
 
 	dir, err := paths.GetSettingsDirectory()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	filePath := filepath.Join(dir, PATH)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// キーをファイルに書き込み
-	return os.WriteFile(filePath, []byte(key), 0644)
+	os.WriteFile(filePath, []byte(key), 0644)
+	return filePath, nil
 }
 
 func ShowPublic() (string, string, error) {

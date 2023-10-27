@@ -130,9 +130,9 @@ func main() {
 				Action: func(ctx *cli.Context) error {
 					args := ctx.Args()
 					key := args.Get(args.Len() - 1)
-					err := keystore.SetSecret(key)
+					path, err := keystore.SetSecret(key)
 					if err == nil {
-						fmt.Println("🔐 Secret is recorded")
+						fmt.Printf("🔐 Secret is recorded in %s\n", path)
 					}
 					return err
 				},
@@ -150,9 +150,9 @@ func main() {
 				Usage: "🗝  Generate key",
 				Action: func(ctx *cli.Context) error {
 					key := nostr.GeneratePrivateKey()
-					err := keystore.SetSecret(key)
+					path, err := keystore.SetSecret(key)
 					if err == nil {
-						fmt.Print("🗝  Generated key\n🗝  You can check the public key with 'hostr show-public'\n")
+						fmt.Printf("🗝  Generated key\n🗝  You can check the public key with 'hostr show-public'\n🔐 Secret is stored in %s\n", path)
 					}
 					return err
 				},
